@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертація</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Конвертація числових систем</h1>
+        <label for="input"></label><textarea id="input" placeholder="Введіть число для конвертації"></textarea>
+        <select title="formats" id="from_base">
+            <option value="2">Двійкова</option>
+            <option value="8">Вісімкова</option>
+            <option value="10">Десяткова</option>
+            <option value="16">Шістнадцяткова</option>
+        </select>
+        <select title="formats" id="to_base">
+            <option value="2">Двійкова</option>
+            <option value="8">Вісімкова</option>
+            <option value="10">Десяткова</option>
+            <option value="16">Шістнадцяткова</option>
+        </select>
+        <button type="button" onclick="convert()">Конвертувати</button>
+        <div id="result"></div>
+        <a href="/" class="back-link">Повернутися на головну</a>
+    </div>
+    <script>
+        async function convert() {
+            const number = document.getElementById('input').value;
+            const from_base = parseInt(document.getElementById('from_base').value, 10); // Преобразовуємо в int
+            const to_base = parseInt(document.getElementById('to_base').value, 10); // Преобразовуємо в int
+
+            const response = await fetch('http://localhost:5000/convert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ number, from_base, to_base })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').textContent = data.result || data.error;
+        }
+    </script>
+</body>
+</html>

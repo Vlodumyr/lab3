@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кодування/Декодування</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Кодування/Декодування</h1>
+
+        <textarea id="input" placeholder="Введіть текст для кодування/декодування"></textarea>
+        <select title="formats" id="format">
+            <option value="base64">Base64</option>
+            <option value="url">URL</option>
+            <option value="rot13">ROT13</option>
+            <option value="hex">Hex</option>
+            <option value="morse">Морзе</option>
+        </select>
+        <button type="button" onclick="encode()">Кодувати</button>
+        <button type="button" onclick="decode()">Декодувати</button>
+
+        <div id="result"></div>
+
+        <a href="/" class="back-link">Повернутися на головну</a>
+    </div>
+
+    <script>
+        async function encode() {
+            const text = document.getElementById('input').value;
+            const format = document.getElementById('format').value;
+            const response = await fetch('http://localhost:5000/encode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, format })
+            });
+            const data = await response.json();
+            document.getElementById('result').textContent = data.encoded || data.error;
+        }
+
+        async function decode() {
+            const text = document.getElementById('input').value;
+            const format = document.getElementById('format').value;
+            const response = await fetch('http://localhost:5000/decode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, format })
+            });
+            const data = await response.json();
+            document.getElementById('result').textContent = data.decoded || data.error;
+        }
+    </script>
+</body>
+</html>

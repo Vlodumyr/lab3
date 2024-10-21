@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор regexp</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Тестувальник регулярних виражень</h1>
+        <textarea id="pattern" placeholder="Введіть регулярний вираз"></textarea>
+        <textarea id="test_string" placeholder="Введіть текст для тестування"></textarea>
+        <button type="button" onclick="generateRegex()">Тестувати</button>
+        <div id="result"></div>
+        <a href="/" class="back-link">Повернутися на головну</a>
+    </div>
+    <script>
+        async function generateRegex() {
+            const pattern = document.getElementById('pattern').value;
+            const test_string = document.getElementById('test_string').value;
+            const response = await fetch('http://localhost:5000/generate_regex', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pattern, test_string })
+            });
+            const data = await response.json();
+            document.getElementById('result').textContent = data.is_valid ? `Matches: ${data.matches.join(', ')}` : `Error: ${data.error}`;
+        }
+    </script>
+</body>
+</html>
